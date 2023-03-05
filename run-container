@@ -47,7 +47,7 @@ vexec () {
     if $verbose; then
         echo "$@"
     fi
-    exec "$@"
+    "$@"
 }
 
 has_container() {
@@ -111,21 +111,10 @@ remove_network() {
 }
 
 start_new_container() {
-    netarg=
-    if test `uname` = Darwin; then
-	if ! netstat -n -a -p tcp | grep "\.${server_port}[  ].\*LISTEN" >/dev/null; then
-            netarg="$netarg --expose=80/tcp -p ${server_port}:80/tcp"
-	fi
-    elif test -x /bin/netstat; then
-	if ! netstat -n -a -p tcp | grep "\.${server_port}[  ].\*LISTEN" >/dev/null; then
-            netarg="$netarg --expose=80/tcp -p ${server_port}:80/tcp"
-	fi
-    fi
+    netarg="$netarg --expose=80/tcp -p ${server_port}:80/tcp"
 
     create_network
 
-    #        --privileged
-    #        --cap-add=SYS_PTRACE --cap-add=NET_ADMIN --security-opt seccomp=unconfined \
     vexec docker run -it \
           --name $container_name \
 	  --network "${network_name}" --network-alias "[${container_name}]" \
@@ -181,15 +170,41 @@ __check_platform()
 build_image()
 {
     if test $platform = linux/arm64; then
-	exec docker build -t "$tag" -f Dockerfile.arm64 --platform linux/arm64 .
+	docker build -t "$tag" -f Dockerfile.arm64 --platform linux/arm64 .
     else
-	exec docker build -t "$tag" -f Dockerfile --platform linux/amd64 .
+	docker build -t "$tag" -f Dockerfile --platform linux/amd64 .
     fi
 }
 
 remove_image()
 {
-    exec docker image rm "$tag"
+    docker image rm "$tag"
+}
+
+do_help()
+{
+    cat <<EOF
+Usage $0:  [--verbose] [--clean] [--debug] [--arm] [command] [command opts...]
+Top-level options:
+ --verbose  Execute docker with verbose output
+ --clean    Discard current container state when using 'start'
+ --debug    Use to show execution of this script for debugging
+ --arm      Force building for ARM64 platform (ARM64/M1 macs only)
+
+Commands:
+ setup        Download the container image (first time setup)
+                - If container image exists, runs 'clean' and updates to latest
+ start        Start the container (requires 'setup' first)
+ stop         Stop the container
+ clean        Remove container state (revert state to image built with 'setup')
+ reset        Remove container state and restart (same as 'clean+start')
+ update-image Remove container state and update image to latest version
+ clean-image  Remove all container state and the image (must 'setup' again)
+ reset-all    Same as clean-image+setup+start
+ clean-old    Discard containers generated with old versions of this script
+
+If no command is specified, the default is 'start'.
+EOF
 }
 
 main()
@@ -221,6 +236,10 @@ main()
 	    shift
 	    platform=linux/amd64
 	    ;;
+	--help)
+	    shift
+	    do_help
+	    exit 0
     esac
 
     __check_platform
@@ -233,6 +252,10 @@ main()
 
     # Subcommands
     case $1 in
+	help)
+	    do_help
+	    exit 0
+	    ;;
 	start|run)
 	    shift
 	    do_start_or_run $@
@@ -265,6 +288,7 @@ main()
 	    ;;
 	*)
 	    echo "Invalid command $1"
+	    do_help
 	    exit 1
 	    ;;
     esac

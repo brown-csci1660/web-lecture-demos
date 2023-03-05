@@ -3,11 +3,8 @@
 This repository contains web application code used in class demos.  
 
 The demo code is packaged as a runnable container image.  However,
-Nick hasn't tested this code on multiple platforms.  In particular,
-**M1 mac support is probably broken.**  Nick will fix this for later
-lectures.  
-
-In the meantime, you can still view the code used in lecture.
+Nick hasn't tested this code on multiple platforms--if you encounter
+issues, please post on Ed and we'll take a look.  
 
 ## Directory structure
 

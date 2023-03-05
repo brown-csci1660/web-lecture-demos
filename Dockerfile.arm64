@@ -1,21 +1,12 @@
 FROM arm64v8/php:8.2-apache-bullseye
 
-# DEVELOPMENT ONLY:  install an editor
-RUN apt-get update && \
-    apt-get -y install nano
-
 # Update UID/GID for web user to use (probably) same user as at build time
 RUN usermod -u 1000 www-data && \
     groupmod -g 1000 www-data
 
-COPY apache2-config.conf /etc/apache2/sites-enabled/000-default.conf
-COPY flag-entrypoint /usr/local/bin/
+# Copy in apache config
+COPY docker-support/apache2-config.conf /etc/apache2/sites-enabled/000-default.conf
+COPY docker-support/entrypoint docker-support/apache2-run /usr/local/bin/
 
-ENTRYPOINT ["flag-entrypoint"]
-STOPSIGNAL SIGWINCH
-CMD ["apache2-foreground"]
-EXPOSE 80
-
-# Deployment version:  copy in hosted files
-#COPY webroot/ /var/www/html
-#RUN chown -R www-data:www-data /var/www/html
+ENTRYPOINT ["entrypoint"]
+CMD ["apache2-run"]
