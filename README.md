@@ -1,4 +1,4 @@
-# Webserver lecture demo example
+# Lecture examples for web security
 
 This repository contains web application code used in class demos.  
 
@@ -12,6 +12,9 @@ The `webroot` directory contains all files hosted by the webserver.
 This corresponds to the "root" of the hosted site--ie, the file
 `webroot/index.php` is viewable at `http://localhost:8080/index.php`
 when the webserver is running.  
+
+See `webroot/index.html` (or http://localhost:8080, when the webserver
+is running) for a list of available demos.  
 
 ## Working with the container image
 
