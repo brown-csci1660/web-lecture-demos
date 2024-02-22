@@ -1,7 +1,8 @@
 <?php
- session_start();
+require './util.php';
+_session_setup();
 ?>
-<DOCTYPE html>
+<!DOCTYPE html>
 <head>
 <title>Test site:  Profile update (POST version)</title>
 </head>

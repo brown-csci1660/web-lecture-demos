@@ -1,7 +1,7 @@
 <?php
  session_start();
 ?>
-<DOCTYPE html>
+<!DOCTYPE html>
 <head>
 <title>Test site:  Profile update</title>
 </head>
