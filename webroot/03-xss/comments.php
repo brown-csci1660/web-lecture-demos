@@ -45,7 +45,7 @@ foreach ($comments as $c) {
     <input id="btn" type="submit" name="submit" value="Post!">
   </form>
 
- <a href="./index.php">Main page</a> |
+    <a href="./index.php">Main page</a> |
     <a href="./setup.php">Reset database</a>
 
 </body>
