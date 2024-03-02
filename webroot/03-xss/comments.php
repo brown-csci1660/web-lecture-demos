@@ -40,6 +40,7 @@ foreach ($comments as $c) {
     </ul>
 
         <h1>Post a comment</h1>
+        <p><i>For examples, take a look at the source code for steal.html, located in this directory.</i></p>
   <form id="form" method="POST" action="comments.php">
     <textarea id="text" cols="40" rows="5" name="text"></textarea><br />
     <input id="btn" type="submit" name="submit" value="Post!">
