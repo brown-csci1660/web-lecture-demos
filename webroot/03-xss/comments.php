@@ -22,7 +22,7 @@
 <?php
  if(isset($_SESSION['user']))
  {
-     echo 'Logged in as :  ' . $_SESSION['user'];
+     echo 'Logged in as:  ' . $_SESSION['user'];
  } else {
      echo 'Not logged in.';
  }
