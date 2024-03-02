@@ -3,8 +3,14 @@
 ?>
 <!DOCTYPE html>
 <head>
-   <meta http-equiv="Content-Security-Policy"
+<!--
+    XSS defense:  add CSP header to prevent loading inline scripts
+    More info:  https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
+-->
+<!--
+    <meta http-equiv="Content-Security-Policy"
      content="default-src 'self';" />
+-->
 
 <title>Test site:  comments</title>
 </head>

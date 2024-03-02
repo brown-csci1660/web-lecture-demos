@@ -9,19 +9,20 @@ session_start();
 <?php
 require 'db.php';
 
-// User input
+// Fetch data from request
 $user = $_POST['username'];
-$pass = $_POST['password']; // In a real system, this should be hashed+salted, but we'll ignore it for now
+$pass = $_POST['password']; // In a real system, this should be hashed and salted, but we'll ignore it for now
 
-// Create the query
-// SELECT * from users WHERE username = '<form value>' AND password = '<form value>'
+// Make the query
+// SELECT * from users where username = 'alice' AND password = <form value>
 $result = $db->query("SELECT * from users WHERE username = '" .  $user . "' AND password = '" . $pass . "'");
 
-// Simplest check:  the query should return 1 row if matching user found, 0 if not
+// Look for results
+// In this version, the query should return >1 row if user found, 0 if not
 if (count($result) > 0) {
     $this_user = $result[0]["username"];
     $profile = $result[0]["profile"];
-    $_SESSION["user"] = $this_user;
+    $_SESSION["user"] = $this_user; // Set up the user's session token and info
 
     echo 'Logged in as:  ' . $this_user;
     echo '<br />';
