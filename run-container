@@ -5,7 +5,7 @@ maindir=""
 container_name=webserver-example
 image_name=webserver-container
 network_name=net-cs1660
-server_port=8080
+server_port=9080
 
 clean=false
 verbose=false

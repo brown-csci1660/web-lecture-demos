@@ -8,6 +8,8 @@ RUN a2enmod headers
 
 # Copy in apache config
 COPY docker-support/apache2-config.conf /etc/apache2/sites-enabled/000-default.conf
+COPY docker-support/php.ini.append /usr/local/etc/php/conf.d/demo.ini
+
 COPY docker-support/entrypoint docker-support/apache2-run /usr/local/bin/
 
 ENTRYPOINT ["entrypoint"]
