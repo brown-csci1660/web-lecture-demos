@@ -18,6 +18,7 @@ _session_setup();
 ?>
 
 <h1>Update your profile (better version)</h1>
+  <p><i>Note:  for attack examples and notes, see the source code for do-csrf.html, located in this directory.</i></p>
   <p>Enter your new profile information:</p>
   <form id="form" method="POST" action="update-post.php">
     <input id="text" type="text" name="profile-data">

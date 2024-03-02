@@ -1,31 +1,75 @@
-<!-- This file performs requests to update the site from an external source -->
-<!-- This file is just hosted by our regular webserver, so the origin is -->
-<!-- the same.  However, without further mitigations we could run any of -->
-<!-- this code from an external site (like the course website, as we did in -->
-<!-- class) and it would work--this is the CSRF attack!. -->
+<!--
+This file performs requests to update the site from an external source
+This file is just hosted by our regular webserver, so the origin is
+the same.  However, without further mitigations we could run any of
+this code from an external site (like the course website, as we did in
+class) and it would work--this is the CSRF attack!
+
+Note: As of 2024, this attack is difficult to perform with modern
+browsers and tools.  Specifically:
+- Chrome does not allow setting cookies with SameSite=None that are
+  not served via HTTPS.  To run this demo locally, you should use
+  Firefox instead (as of 2024) does not have this requirement by default.
+
+- Recent version of Firefox and other browsers commonly isolate
+  cookies for each site so cross-origin requests cannot access them.  To
+  run the attack, you should disable any browser settings for cookie
+  site isolation, as well as any privacy settings or extensions that
+  block third-party cookies.
+-->
+
 <DOCTYPE html>
   <head>
 
-    <!-- POST version:  Here's some javascript we could embed to do the HTTP request -->
     <script type="text/javascript">
-      function doPost() {
-          xhr = new XMLHttpRequest();
-          xhr.open("POST", "http://localhost:8080/update-post.php", true);
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-          xhr.send("profile-data=wheeeeee");
+      // POST version:  Here's some javascript we could embed to do the HTTP request
+      // This example demonstrates two methods to make HTTP requests
+      // using JS:  fetch() and XmlHttpRequest (XHR)
+      const destUrl = "http://localhost:9080/01-client-csrf/update-post.php";
+
+      // fetch() version
+      // More info:  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+      async function doPostFetch() {
+	  const response = await fetch(destUrl, {
+	      "headers": {
+		  "Content-Type": "application/x-www-form-urlencoded",
+	      },
+	      "body": "profile-data=wheeeeeeeeeee&submit=Update+better",
+	      "method": "POST",
+	  });
+	  console.log(response);
+	  console.log(await response.text());
       }
+
+
+      // XHR version (older version of fetch())
+      // More info:  https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+      function doPostXHR() {
+          xhr = new XMLHttpRequest();
+          xhr.open("POST", destUrl, true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+	  xhr.onreadystatechange = function() {
+	      if (xhr.readyState == XMLHttpRequest.DONE) {
+		  console.log(xhr.responseText);
+	      }
+	  }
+          xhr.send("profile-data=wheeeeee");
+	  }
     </script>
+
   </head>
   <body>
-
+    <p><i>See page source for examples and info.</i></p>
     <!-- GET version (as a link) -->
-    <a href="http://localhost:8080/update.php?profile-data=aaabbbbbbb&submit=Update">Click me! (GET version)</a>
+    <a href="http://localhost:9080/update.php?profile-data=aaabbbbbbb&submit=Update">Click me! (GET version)</a>
+    <br />
+    <br />
     <!-- Note: we don't have to use a link -->
     <!-- that the user would click--we could put the URL as an image or an -->
     <!-- iframe to make it load automatically -->
 
      <!-- Button to trigger POST version -->
-     <input type="button" value="Click me!!!!! (POST version)" onclick="DoPost();">
-
+    <input type="button" value="Click me!!!!! (POST version, fetch)" onclick="doPostFetch();"><br />
+    <input type="button" value="Click me!!!!! (POST version, XHR)" onclick="doPostXHR();">
   </body>
 </html>
